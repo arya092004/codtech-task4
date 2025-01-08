@@ -13,4 +13,4 @@ BATCH DURATION - DEC 31ST,2024 TO JAN 31st,2025
 
 MENTOR NAME - NEELA SANTOSH
 
-CIRCUIT DESGIN - 
+CIRCUIT DESGIN - https://github.com/arya092004/codtech-task4/blob/main/speech%20recognition%20system%20circuit%20design.jpeg
