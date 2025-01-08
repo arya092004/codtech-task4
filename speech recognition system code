@@ -1,0 +1,65 @@
+#include <SoftwareSerial.h>
+#include <EasyVR.h>
+
+// Create software serial port for EasyVR
+SoftwareSerial easyvrSerial(12, 13); // RX, TX
+
+EasyVR easyvr(easyvrSerial);
+
+int ledPin = 13; // Example output pin
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW);
+  
+  Serial.begin(9600);
+  easyvrSerial.begin(9600);
+  
+  if (!easyvr.detect()) {
+    Serial.println("EasyVR module not detected!");
+    while (1);
+  }
+  
+  Serial.println("EasyVR Module detected");
+  easyvr.setTimeout(5);
+  easyvr.setLanguage(EasyVR::ENGLISH);
+}
+
+void loop() {
+  Serial.println("Say a command:");
+  easyvr.recognizeCommand();
+  
+  while (!easyvr.hasFinished()) {
+    delay(100);
+  }
+  
+  if (easyvr.getError() == EasyVR::ERR_TIMEOUT) {
+    Serial.println("Timeout error");
+    return;
+  }
+  
+  int idx = easyvr.getCommand();
+  
+  if (idx != -1) {
+    Serial.print("Command: "); Serial.println(idx);
+    executeCommand(idx);
+  } else {
+    Serial.println("Command not recognized");
+  }
+}
+
+void executeCommand(int command) {
+  switch (command) {
+    case 0: // Command 0: Turn on LED
+      digitalWrite(ledPin, HIGH);
+      Serial.println("LED turned ON");
+      break;
+    case 1: // Command 1: Turn off LED
+      digitalWrite(ledPin, LOW);
+      Serial.println("LED turned OFF");
+      break;
+    default:
+      Serial.println("Unknown command");
+      break;
+  }
+}
